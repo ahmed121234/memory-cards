@@ -1,95 +1,75 @@
-//variables
-
-const levels = {
-  level1: 4,
-  level2: 8,
-  level3: 12
-}
-
-let currentLevel = null
-let lives = 6
-let moves = 0
-let cardValues = []
 let flippedCards = []
+let moves = 0
+let lives = 7
+let timer = 60
+let timerInterval
+let currentLevel = 'level1'
+let cardValues = []
+const levels = ['level1', 'level2', 'level3']
 
-const landingPage = document.getElementById('landingPage')
-const gamePage = document.getElementById('gamePage')
-const cardsContainer = document.getElementById('cardsContainer')
-const livesDisplay = document.getElementById('lives')
-const movesDisplay = document.getElementById('moves')
-const gameOverMessage = document.getElementById('gameOverMessage')
-const levelCompleteMessage = document.getElementById('levelCompleteMessage')
-
-// Function to start the game at a selected level
-
+// Start the game at a specific level
 function startLevel(level) {
   currentLevel = level
-  lives = 8
+  lives = 7
   moves = 0
-  cardValues = generateCardValues(levels[level])
   flippedCards = []
+  cardValues = generateCardValues(level)
+  timer = 60
 
   updateStats()
   generateCards()
-  cardsContainer.style.pointerEvents = 'auto'
-  landingPage.style.display = 'none'
-  gamePage.style.display = 'block'
+  startTimer()
+
+  document.getElementById('landingPage').style.display = 'none'
+  document.getElementById('gamePage').style.display = 'block'
+  resetMessages()
 }
 
-// Function to generate the cards based on the level
-
-function generateCardValues(cardCount) {
+// Generate card values for the level
+function generateCardValues(level) {
+  const numCards = level === 'level1' ? 4 : level === 'level2' ? 8 : 12
   const values = []
-  for (let i = 1; i <= cardCount / 2; i++) {
-    values.push(i, i)
+  for (let i = 1; i <= numCards / 2; i++) {
+    values.push(i, i) // Create pairs
   }
-  return values.sort(() => Math.random() - 0.5)
+  return shuffle(values)
 }
 
-//function generateCards() {}
+// Shuffle array
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array[i], array[j]] = [array[j], array[i]]
+  }
+  return array
+}
 
+// Update lives, moves, and timer stats
+function updateStats() {
+  document.getElementById('lives').textContent = lives
+  document.getElementById('moves').textContent = moves
+  document.getElementById('timer').textContent = `${timer}`
+}
+
+// Generate cards on the game board
 function generateCards() {
-  cardsContainer.innerHTML = ''
+  const container = document.getElementById('cardsContainer')
+  container.innerHTML = '' // Clear existing cards
   cardValues.forEach((value) => {
     const card = document.createElement('div')
     card.classList.add('card')
     card.dataset.value = value
     card.addEventListener('click', flipCard)
-    cardsContainer.appendChild(card)
+    container.appendChild(card)
   })
 }
 
-// Shuffle the card values randomly
-
-//cardValues.sort()
-
-// Create the card elements and append to the container
-
-//const cardsContainer = document.getElementById()
-
-// Function to handle flipping the card
-
-//function flipCard() {}
-
-// Check if two cards are flipped
-
-// Function to check if the two flipped cards match
-
-//function checkForMatch() {}
-
-// Function to handle trying again after losing
-
-//function restartGame() {}
-
-// Function to move to the next level
-
-//function nextLevel() {}
-
+// Handle card flip logic
 function flipCard() {
-  if (flippedCards.length === 2) return
+  if (flippedCards.length === 2) return // Only two cards at a time
 
-  this.textContent = this.dataset.value
   this.classList.add('flipped')
+  this.textContent = this.dataset.value
   flippedCards.push(this)
 
   if (flippedCards.length === 2) {
@@ -98,9 +78,12 @@ function flipCard() {
   }
 }
 
+// Check if two flipped cards match
 function checkMatch() {
   const [card1, card2] = flippedCards
   if (card1.dataset.value === card2.dataset.value) {
+    card1.classList.add('matched')
+    card2.classList.add('matched')
     flippedCards = []
     checkWin()
   } else {
@@ -112,69 +95,64 @@ function checkMatch() {
       flippedCards = []
       lives--
       updateStats()
-      checkGameOver()
+      if (lives === 0) checkGameOver()
     }, 1000)
   }
 }
 
-function updateStats() {
-  livesDisplay.textContent = lives
-  movesDisplay.textContent = moves
-}
-
-function checkGameOver() {
-  if (lives === 0) {
-    gameOverMessage.style.display = 'block'
-    cardsContainer.style.pointerEvents = 'none'
-  }
-}
-
+// Check if the game is won
 function checkWin() {
-  const flippedCount = document.querySelectorAll('.card.flipped').length
-  if (flippedCount === cardValues.length) {
-    levelCompleteMessage.style.display = 'block'
-    cardsContainer.style.pointerEvents = 'none'
+  const matchedCards = document.querySelectorAll('.card.matched').length
+  if (matchedCards === cardValues.length) {
+    clearInterval(timerInterval)
+    document.getElementById('levelCompleteMessage').style.display = 'block'
   }
 }
 
+// Game over logic
+function checkGameOver() {
+  clearInterval(timerInterval)
+  document.getElementById('gameOverMessage').style.display = 'block'
+}
+
+// Timer management
+function startTimer() {
+  clearInterval(timerInterval)
+  timerInterval = setInterval(() => {
+    timer--
+    document.getElementById('timer').textContent = `${timer}`
+    if (timer <= 0) checkGameOver()
+  }, 1000)
+}
+
+// Reset all game messages
+function resetMessages() {
+  document.getElementById('gameOverMessage').style.display = 'none'
+  document.getElementById('levelCompleteMessage').style.display = 'none'
+  document.getElementById('congratsMessage').style.display = 'none'
+}
+
+// Move to the next level
 function nextLevel() {
-  const levelKeys = Object.keys(levels)
-  const nextLevelIndex = levelKeys.indexOf(currentLevel) + 1
-
-  if (nextLevelIndex < levelKeys.length) {
-    currentLevel = levelKeys[nextLevelIndex]
-    lives = 8
-    moves = 0
-    cardValues = generateCardValues(levels[currentLevel])
-    flippedCards = []
-
-    updateStats()
-    generateCards()
-    levelCompleteMessage.style.display = 'none'
-    cardsContainer.style.pointerEvents = 'auto'
+  const currentIndex = levels.indexOf(currentLevel)
+  if (currentIndex + 1 < levels.length) {
+    startLevel(levels[currentIndex + 1])
   } else {
-    congratsMessage.style.display =
-      "Congratulations! You've completed all levels!"
-    resetGame()
+    document.getElementById('congratsMessage').style.display = 'block'
   }
 }
 
+// Restart the game
 function resetGame() {
-  currentLevel = null
-  lives = 8
-  moves = 0
-  cardValues = []
-  flippedCards = []
-
-  landingPage.style.display = 'block'
-  gamePage.style.display = 'none'
-  gameOverMessage.style.display = 'none'
-  levelCompleteMessage.style.display = 'none'
+  clearInterval(timerInterval)
+  document.getElementById('gamePage').style.display = 'none'
+  document.getElementById('landingPage').style.display = 'block'
 }
 
+// Event listeners
 document.querySelectorAll('.levelBtn').forEach((button) => {
   button.addEventListener('click', () => startLevel(button.id))
 })
-
 document.getElementById('tryAgainBtn').addEventListener('click', resetGame)
 document.getElementById('nextLevelBtn').addEventListener('click', nextLevel)
+document.getElementById('restartGameBtn').addEventListener('click', resetGame)

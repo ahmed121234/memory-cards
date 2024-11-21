@@ -7,28 +7,40 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <div id="landingPage" class="page">
+    <!-- Landing Page -->
+    <div id="landingPage">
       <h1>Welcome to the Memory Card Game!</h1>
       <p>Select a level to start:</p>
       <button id="level1" class="levelBtn">Level 1 (4 cards)</button>
       <button id="level2" class="levelBtn">Level 2 (8 cards)</button>
       <button id="level3" class="levelBtn">Level 3 (12 cards)</button>
     </div>
-    <div id="gamePage" class="page" style="display: none">
+
+    <!-- Game Page -->
+    <div id="gamePage" style="display: none">
       <h2>Memory Game</h2>
-      <p>Lives: <span id="lives">3</span></p>
-      <p>Moves: <span id="moves">0</span></p>
+      <div class="stats">
+        <p>Lives: <span id="lives">3</span></p>
+        <p>Moves: <span id="moves">0</span></p>
+        <p>Time: <span id="timer">60</span>s</p>
+      </div>
       <div id="cardsContainer"></div>
+
+      <!-- Game Messages -->
       <div id="gameOverMessage" style="display: none">
-        <p>Game Over! <button id="tryAgainBtn">Try Again</button></p>
+        <h3>Game Over!</h3>
+        <button id="tryAgainBtn">Try Again</button>
       </div>
       <div id="levelCompleteMessage" style="display: none">
-        <p>Level Complete! <button id="nextLevelBtn">Next Level</button></p>
-        <div id="congratsMessage" style="display: none">
-          <p>Congratulations you did it! <button id="newGameBtn"></button></p>
-        </div>
+        <h3>Level Complete!</h3>
+        <button id="nextLevelBtn">Next Level</button>
+      </div>
+      <div id="congratsMessage" style="display: none">
+        <h3>Congratulations! You've completed all levels!</h3>
+        <button id="restartGameBtn">Play Again</button>
       </div>
     </div>
+
     <script src="./app.js"></script>
   </body>
 </html>

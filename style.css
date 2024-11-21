@@ -1,27 +1,51 @@
 body {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  color: #892b5ff0;
+  font-family: 'Arial', sans-serif;
+  color: #4e4e4e;
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin: 0;
-  background-color: #2298caf0;
+  background: linear-gradient(to bottom, #64b3f4, #2e9bff);
 }
 
 .page {
   text-align: center;
+  width: 80%;
+  max-width: 600px;
+  margin: auto;
 }
 
 button {
-  padding: 10px 20px;
+  padding: 12px 20px;
   margin: 10px;
   font-size: 16px;
   cursor: pointer;
+  background-color: #008cba;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #007b8a;
+}
+
+#landingPage {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #gamePage {
   display: none;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #cardsContainer {
@@ -33,24 +57,67 @@ button {
 }
 
 .card {
-  width: 100px;
-  height: 100px;
-  background-color: #f10bd2;
+  width: 90px;
+  height: 90px;
+  background-color: #f2f2f2;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 32px;
+  font-size: 1.5em;
+  color: transparent;
   cursor: pointer;
-  border-radius: 10px;
-  transition: background-color 0.3s;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.1);
 }
 
 .card.flipped {
-  background-color: #8b17ff;
-  color: #c381ec;
+  background-color: #2196f3;
+  color: #ffffff;
 }
 
-button:hover {
-  background-color: #007bff;
-  color: rgb(224, 129, 222);
+.card.matched {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+#stats {
+  margin: 20px 0;
+}
+
+#gameOverMessage,
+#levelCompleteMessage,
+#congratsMessage {
+  display: none;
+  margin-top: 30px;
+}
+
+#gameOverMessage p,
+#levelCompleteMessage p,
+#congratsMessage p {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+#gameOverMessage button,
+#nextLevelBtn,
+#restartGameBtn {
+  background-color: #e74c3c;
+}
+
+#levelCompleteMessage p {
+  color: #27ae60;
+}
+
+#nextLevelBtn {
+  background-color: #2ecc71;
+}
+
+#congratsMessage p {
+  color: #3498db;
 }
