@@ -1,3 +1,4 @@
+//variables
 let flippedCards = []
 let moves = 0
 let lives = 7
@@ -64,7 +65,7 @@ function generateCards() {
   })
 }
 
-// Handle card flip logic
+//card flip logic
 function flipCard() {
   if (flippedCards.length === 2) return // Only two cards at a time
 
@@ -100,7 +101,7 @@ function checkMatch() {
   }
 }
 
-// Check if the game is won
+// Check if the game is a win
 function checkWin() {
   const matchedCards = document.querySelectorAll('.card.matched').length
   if (matchedCards === cardValues.length) {
@@ -123,13 +124,6 @@ function startTimer() {
     document.getElementById('timer').textContent = `${timer}`
     if (timer <= 0) checkGameOver()
   }, 1000)
-}
-
-// Reset all game messages
-function resetMessages() {
-  document.getElementById('gameOverMessage').style.display = 'none'
-  document.getElementById('levelCompleteMessage').style.display = 'none'
-  document.getElementById('congratsMessage').style.display = 'none'
 }
 
 // Move to the next level
@@ -156,3 +150,10 @@ document.querySelectorAll('.levelBtn').forEach((button) => {
 document.getElementById('tryAgainBtn').addEventListener('click', resetGame)
 document.getElementById('nextLevelBtn').addEventListener('click', nextLevel)
 document.getElementById('restartGameBtn').addEventListener('click', resetGame)
+
+//all game messages
+function resetMessages() {
+  document.getElementById('gameOverMessage').style.display = 'none'
+  document.getElementById('levelCompleteMessage').style.display = 'none'
+  document.getElementById('congratsMessage').style.display = 'none'
+}
